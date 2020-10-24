@@ -118,6 +118,9 @@ class TicTacToe:
 
 class TicTacTwo:
 
+    def __init__(self):
+        self.all_possible_moves = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+
     def _get_player_to_move(self, position):
         return position[0]
 
@@ -144,13 +147,32 @@ class TicTacTwo:
     def generate_moves(self, position):
         all_moves = set()
         board = position[3]
-        double_left = position[position[0]]
-        for i in range(3):
-            for j in range(3):
-                if board[i][j][1] == 3:
-                    continue
-                if board[i][j][1] < 3 and abs(board[i][j][0]) < 2:
-                    all_moves.add(((i, j),))
+        player = position[0]
+        if position[0] == -1:
+            double_left = position[1]
+        else:
+            double_left = position[2]
+        for i, j in self.all_possible_moves:
+            # single move
+            if board[i][j][1] < 3 and abs(board[i][j][0]) < 2:
+                all_moves.add(((i, j),))
+            # double moves in same position
+            if (board[i][j][0] == 0 or board[i][j][0] == player * -1) and board[i][j][1] < 2:
+                all_moves.add(((i, j),(i, j)))
+        if not double_left:
+            return all_moves
+        for k, (a, b) in enumerate(self.all_possible_moves):
+            for l, (c, d) in enumerate(self.all_possible_moves):
+                # double moves that aren't in the same position
+                if k < l:
+                    if abs(board[a][b][0]) < 2 and board[a][b][1] < 3 and abs(board[c][d][0]) < 2 and board[c][d][1] < 3:
+                        all_moves.add(((a, b), (c, d)))
+        return all_moves
+        '''                # double move
+                        if ((i, j), (l, k)) in all_moves or ((l, k), (i, j)) in all_moves:
+                            continue
+                        if i == l and j == k:
+                            if 
                 if double_left:
                     if board[i][j][1] < 2:
                         all_moves.add(((i, j), (i, j)))
@@ -163,7 +185,7 @@ class TicTacTwo:
                                 if ((i, j), (l, k)) not in all_moves and ((l, k), (i, j)) not in all_moves:
                                     all_moves.add(((i, j), (l, k)))
 
-        return all_moves
+        return all_moves'''
 
     def primitive_value(self, position):
         # 0 is not primitive, 1 is lose, 2 is win, 3 is tie
