@@ -157,8 +157,9 @@ class TicTacTwo:
             if board[i][j][1] < 3 and abs(board[i][j][0]) < 2:
                 all_moves.add(((i, j),))
             # double moves in same position
-            if (board[i][j][0] == 0 or board[i][j][0] == player * -1) and board[i][j][1] < 2:
-                all_moves.add(((i, j),(i, j)))
+            if double_left:
+                if (board[i][j][0] == 0 or board[i][j][0] == player * -1) and board[i][j][1] < 2:
+                    all_moves.add(((i, j),(i, j)))
         if not double_left:
             return all_moves
         for k, (a, b) in enumerate(self.all_possible_moves):
@@ -212,11 +213,12 @@ class TicTacTwo:
             return 1
         elif pos[0] == -2:
             return -1
-        if pos[1] == 2:
-            return 1 if pos[1] > 0 else -1
+        if pos[1] == 3:
+            return 1 if pos[0] > 0 else -1
         return 0
 
     def _check_for_win(self, parity, moves_left, *args):
+        # return of 1 is lose, 2 is win, 3 is a tie
         for arg in args:
             for val in arg:
                 if val == parity * 3:

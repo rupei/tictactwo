@@ -30,6 +30,7 @@ def solve(position, symmetry_removal=False):
         win = False
         child_remoteness = []
         for move in game.generate_moves(position):
+            # return of 1 is lose, 2 is win, 3 is a tie
             value, remoteness = memo_solve(game.do_move(position, move), memo)
             if value == 1:
                 win = True
@@ -54,10 +55,10 @@ def solve(position, symmetry_removal=False):
         return memo[position]
     return memo_solve(position, memo={})
 
-
 # starting_pos = 10
-starting_pos = (-1, True, True, (((1, 3), (1, 3), (1, 3)), ((0, 0), (0, 0), (0, 0)), ((0, 0), (0, 0), (0, 0))))
-solve(starting_pos, symmetry_removal=True)
+# starting_pos = (-1, False, False, (((1, 3), (-1, 3), (0, 2)), ((0, 0), (-1, 3), (0, 0)), ((-1, 3), (0, 0), (2, 2))))
+starting_pos = (-1, True, True, (((0, 0), (0, 0), (0, 0)), ((0, 0), (0, 0), (0, 0)), ((0, 0), (0, 0), (0, 0))))
+print(solve(starting_pos, symmetry_removal=False))
 print("Remote  Win     Lose    Tie     Total")
 gap = "       "
 total_wins = total_losses = total_ties = 0
