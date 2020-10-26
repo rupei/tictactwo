@@ -11,6 +11,9 @@ def solve(position, symmetry_removal=False):
     # returns a tuple with semantics (value, remoteness)
     def memo_solve(position, memo):
         global count
+        count += 1
+        if count % 100000 == 0:
+            print(count)
         if symmetry_removal:
             symmetrical_positions = game.get_symmetric_positions(position)
             for pos in symmetrical_positions:
@@ -19,9 +22,6 @@ def solve(position, symmetry_removal=False):
         elif position in memo:
             return memo[position]
         if game.primitive_value(position):
-            count += 1
-            if count % 10000 == 0:
-                print(count)
             val = game.primitive_value(position)
             memo[position] = (val, 0)
             analysis[0] = analysis.get(0, []) + [val]
